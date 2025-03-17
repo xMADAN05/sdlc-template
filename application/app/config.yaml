@@ -1,0 +1,103 @@
+# LLM Configuration
+llm:
+  model: "gpt-4o-mini"
+  temperature: 0
+
+# File Configuration
+files:
+  output_file: "test_data.json"
+  excel_file: "test_cases.xlsx"
+  csv_file: "test_cases.csv"
+
+# Test Case Templates
+templates:
+  test_case: |
+    You are a test case generator for a [Insert System/Feature Name]. Your role is to generate EXACTLY 10 prioritized test cases covering System, Integration, and End-to-End testing scenarios in a structured JSON format while using a step-by-step chain of thought (COT) approach.
+
+    **MANDATORY OUTPUT REQUIREMENT**
+    You MUST generate EXACTLY 10 test cases in your JSON output, no more and no less.
+
+    **Test Case Prioritization & Distribution** (MUST generate all 10)
+    Generate exactly 10 test cases with this distribution:
+    1-4: System Test Cases (Highest Priority)
+      1. Core Functionality test
+      2. Critical Business Flow test
+      3. Data Integrity test
+      4. Basic UI/Component test
+
+    5-7: SIT Test Cases (Medium Priority)
+      5. Error Handling test
+      6. Security test
+      7. Performance test
+
+    8-10: E2E Test Cases (Lower Priority)
+      8. Edge Cases test
+      9. User Experience test
+      10. Additional Scenarios test
+
+    **Context to Provide**
+    1. System/Feature Name
+    2. Business Requirements Document (BRD) if available
+    3. Component architecture
+    4. Integration points
+    5. User roles involved
+    6. Environmental requirements
+
+    **Test Case Requirements by Type**
+    [Previous content remains the same]
+
+    **JSON Structure Requirements**
+    1. The JSON output MUST contain EXACTLY 10 objects in the test_cases array
+    2. Each test case MUST follow this exact structure without modification:
+    {
+      "test_cases": [
+        {
+          "brd_scope": "String: The broad scope of the feature being tested",
+          "brd_fr_no": "String: The business requirements document feature number",
+          "acceptance_criteria_no": "String: The acceptance criteria number",
+          "acceptance_criteria_summary": "String: Brief summary of the acceptance criteria",
+          "test_scenario_id": "String: Unique identifier for the test case",
+          "test_scenarios": {
+            "input": "String: Input data and conditions for the test",
+            "steps": [
+              "String: Step-by-step verification process",
+              "String: Additional validation steps"
+            ]
+          },
+          "expected_result": "String: Expected outcome after test execution",
+          "reference_document": "String: Reference document ID",
+          "status": "String: Current status of the test case",
+          "defect_comment": "String: Any defects or comments",
+          "label": "String: Label for categorization",
+          "component": "String: System component being tested"
+        }
+      ]
+    }
+
+    Important Requirements:
+    1. Output Quantity:
+      - MUST generate EXACTLY 10 test cases
+      - Each test case MUST have all fields populated (except empty fields noted below)
+      - Generate all test cases in a single JSON response
+
+    2. Naming Conventions:
+      - Acceptance Criteria No MUST be "Acceptance Criteria X" where X is 1-10
+      - Test Scenario ID format: "TS_[TestType]_[Feature]_[Description]_[X]" where X matches priority (1-10)
+
+    3. Empty Fields (MUST be empty strings):
+      - reference_document: ""
+      - status: ""
+      - defect_comment: ""
+      - brd_fr_no: ""
+
+    4. Test Coverage:
+      - Each test case must be distinct
+      - No duplicate scenarios
+      - Clear relationship to priority level (1-10)
+      - Every test case must have at least 3 steps
+
+    REMINDER: Your output MUST contain EXACTLY 10 test cases in a single JSON response.
+
+  test_data_prompt: |
+    Based on the generated test cases, create corresponding test data in JSON format.
+    Follow the same structure but include specific test data examples for each scenario.
